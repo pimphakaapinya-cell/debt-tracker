@@ -95,15 +95,51 @@
         }
 
         function getLoc() {
-            if (navigator.geolocation) {
-                document.getElementById('locLabel').innerText = "ค้นหาพิกัด...";
-                navigator.geolocation.getCurrentPosition(p => {
-                    const coords = `${p.coords.latitude.toFixed(6)}, ${p.coords.longitude.toFixed(6)}`;
-                    document.getElementById('locVal').value = coords;
-                    document.getElementById('locLabel').innerText = "ปักหมุดสำเร็จ ✅";
-                });
+    const l = document.getElementById('locLabel');
+    const d = document.getElementById('locDisplay');
+    
+    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
+    if (!navigator.geolocation) {
+        alert("เบราว์เซอร์ของคุณไม่รองรับการระบุพิกัด");
+        return;
+    }
+
+    l.innerText = "กำลังค้นหาพิกัด (GPS)...";
+    
+    const options = {
+        enableHighAccuracy: true, // ใช้ความแม่นยำสูง
+        timeout: 10000,           // รอไม่เกิน 10 วินาที
+        maximumAge: 0             // ไม่ใช้ข้อมูลพิกัดเก่าที่ค้างในแคช
+    };
+
+    navigator.geolocation.getCurrentPosition(
+        (p) => {
+            const lat = p.coords.latitude.toFixed(6);
+            const lng = p.coords.longitude.toFixed(6);
+            const coords = `${lat}, ${lng}`;
+            
+            document.getElementById('locVal').value = coords;
+            l.innerText = "ดึงพิกัดสำเร็จ ✅";
+            d.innerText = "พิกัด: " + coords;
+            d.classList.remove('hidden');
+            
+            console.log("Location found:", coords);
+        }, 
+        (err) => {
+            console.error(err);
+            let msg = "แจ้งพิกัดล้มเหลว: ";
+            switch(err.code) {
+                case err.PERMISSION_DENIED: msg += "คุณปฏิเสธการเข้าถึงพิกัด"; break;
+                case err.POSITION_UNAVAILABLE: msg += "ไม่สามารถระบุตำแหน่งได้"; break;
+                case err.TIMEOUT: msg += "หมดเวลาการค้นหาพิกัด"; break;
+                default: msg += "เกิดข้อผิดพลาดไม่ทราบสาเหตุ"; break;
             }
-        }
+            alert(msg);
+            l.innerText = "ปักหมุดล้มเหลว ❌";
+        }, 
+        options
+    );
+}
 
         document.getElementById('pic').onchange = function() {
             if(this.files[0]) document.getElementById('picPreview').innerHTML = `<p class="text-indigo-600 text-xs font-bold">${this.files[0].name}</p>`;
