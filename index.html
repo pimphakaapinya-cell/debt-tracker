@@ -94,50 +94,41 @@
             document.getElementById('nameDisplay').innerText = item ? "ลูกค้า: " + item.name : "";
         }
 
-        function getLoc() {
+      function getLoc() {
     const l = document.getElementById('locLabel');
-    const d = document.getElementById('locDisplay');
+    const d = document.getElementById('locDisplay'); // ส่วนที่ใช้แสดงตัวเลข
     
-    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
     if (!navigator.geolocation) {
-        alert("เบราว์เซอร์ของคุณไม่รองรับการระบุพิกัด");
+        alert("เบราว์เซอร์ไม่รองรับ GPS");
         return;
     }
 
-    l.innerText = "กำลังค้นหาพิกัด (GPS)...";
+    l.innerText = "กำลังค้นหาพิกัด...";
     
-    const options = {
-        enableHighAccuracy: true, // ใช้ความแม่นยำสูง
-        timeout: 10000,           // รอไม่เกิน 10 วินาที
-        maximumAge: 0             // ไม่ใช้ข้อมูลพิกัดเก่าที่ค้างในแคช
-    };
-
     navigator.geolocation.getCurrentPosition(
         (p) => {
             const lat = p.coords.latitude.toFixed(6);
             const lng = p.coords.longitude.toFixed(6);
             const coords = `${lat}, ${lng}`;
             
+            // 1. บันทึกค่าลงตัวแปรซ่อน (เพื่อส่งไป Sheet)
             document.getElementById('locVal').value = coords;
-            l.innerText = "ดึงพิกัดสำเร็จ ✅";
-            d.innerText = "พิกัด: " + coords;
-            d.classList.remove('hidden');
             
-            console.log("Location found:", coords);
+            // 2. เปลี่ยนข้อความบนปุ่ม
+            l.innerText = "ดึงพิกัดสำเร็จ ✅";
+            
+            // 3. แสดงตัวเลขบนหน้าจอ (จุดที่ต้องแก้)
+            if (d) {
+                d.innerText = "พิกัดปัจจุบัน: " + coords;
+                d.classList.remove('hidden'); // แสดง Element ออกมา
+                d.style.display = "block";    // มั่นใจว่าไม่ถูกซ่อน
+            }
         }, 
         (err) => {
-            console.error(err);
-            let msg = "แจ้งพิกัดล้มเหลว: ";
-            switch(err.code) {
-                case err.PERMISSION_DENIED: msg += "คุณปฏิเสธการเข้าถึงพิกัด"; break;
-                case err.POSITION_UNAVAILABLE: msg += "ไม่สามารถระบุตำแหน่งได้"; break;
-                case err.TIMEOUT: msg += "หมดเวลาการค้นหาพิกัด"; break;
-                default: msg += "เกิดข้อผิดพลาดไม่ทราบสาเหตุ"; break;
-            }
-            alert(msg);
+            alert("แจ้งพิกัดล้มเหลว: " + err.message);
             l.innerText = "ปักหมุดล้มเหลว ❌";
         }, 
-        options
+        { enableHighAccuracy: true, timeout: 10000 }
     );
 }
 
