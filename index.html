@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Debt Tracker v6.7 - Mandatory Photo</title>
+    <title>Debt Tracker v6.9.2 - Complete System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&display=swap" rel="stylesheet">
@@ -12,57 +12,70 @@
         body { font-family: 'Anuphan', sans-serif; touch-action: manipulation; }
         .modal-open { overflow: hidden; }
         #pdf-area { padding: 20px; background: white; }
+        .img-preview { 
+            max-width: 100px; 
+            max-height: 100px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl flex flex-col relative">
-        <div class="bg-indigo-900 p-6 text-white rounded-b-[2rem] shadow-lg text-center sticky top-0 z-40">
-            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v6.8</h1>
-            <p class="text-[10px] opacity-70 uppercase tracking-widest">Mandatory Photo & PDF Export</p>
+        <div class="bg-indigo-900 p-6 text-white rounded-b-[2.5rem] shadow-lg text-center sticky top-0 z-40">
+            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v6.9.2</h1>
+            <p class="text-[10px] opacity-70 uppercase tracking-widest font-bold">Complete Management System</p>
         </div>
 
         <div class="p-5 space-y-4 flex-1">
-            <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900 outline-none">
-                <option value="">-- เลือกสำนักงาน --</option>
-            </select>
-
-            <div id="countSection" class="opacity-40 pointer-events-none transition-all">
-                <select id="countSelect" onchange="onCountChange()" class="w-full p-4 bg-white border-2 border-indigo-50 rounded-2xl font-bold text-gray-700 outline-none">
-                    <option value="">-- เลือกจำนวนฉบับ --</option>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest ml-1">1. เลือกสำนักงาน (คอลัมน์ B)</label>
+                <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900 outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">-- กำลังโหลดข้อมูล... --</option>
                 </select>
             </div>
 
-            <div id="caSection" class="space-y-2 opacity-40 pointer-events-none transition-all">
+            <div id="countSection" class="space-y-1 opacity-40 pointer-events-none transition-all duration-300">
+                <label class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest ml-1">2. กรองจำนวนฉบับ (คอลัมน์ F)</label>
+                <select id="countSelect" onchange="onCountChange()" class="w-full p-4 bg-white border-2 border-indigo-50 rounded-2xl font-bold text-gray-700 outline-none">
+                    <option value="">-- โปรดเลือกสำนักงานก่อน --</option>
+                </select>
+            </div>
+
+            <div id="caSection" class="space-y-2 opacity-40 pointer-events-none transition-all duration-300">
+                <label class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest ml-1">3. ค้นหาหมายเลข CA / ชื่อลูกค้า</label>
                 <div class="flex gap-2">
-                    <input type="text" id="search" onkeyup="filterCA()" placeholder="ค้นหา CA / ชื่อ..." class="flex-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none">
-                    <button type="button" onclick="showCustomerDetails()" class="bg-amber-500 text-white px-4 rounded-2xl shadow-md active:scale-95 transition">
-                        <i class="fas fa-file-pdf"></i>
+                    <input type="text" id="search" onkeyup="filterCA()" placeholder="พิมพ์เพื่อค้นหา..." class="flex-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button type="button" onclick="showCustomerDetails()" class="bg-amber-500 text-white px-5 rounded-2xl shadow-md active:scale-95 transition flex items-center justify-center">
+                        <i class="fas fa-file-invoice"></i>
                     </button>
                 </div>
                 <select id="caSelect" onchange="updateDebtDisplay()" class="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-gray-700 bg-white outline-none">
-                    <option value="">-- เลือก CA --</option>
+                    <option value="">-- โปรดเลือกกลุ่มข้อมูลก่อน --</option>
                 </select>
             </div>
 
-            <div class="bg-gradient-to-br from-indigo-50 to-white p-5 rounded-3xl border border-indigo-100 text-center">
-                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน</p>
+            <div class="bg-gradient-to-br from-indigo-50 to-white p-5 rounded-3xl border border-indigo-100 shadow-sm text-center">
+                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน (คอลัมน์ AD)</p>
                 <span id="debtDisplay" class="text-4xl font-black text-gray-800">0.00</span>
                 <p id="nameDisplay" class="text-sm text-indigo-500 font-bold mt-2"></p>
             </div>
 
             <form id="debtForm" class="space-y-4">
-                <input type="number" id="amt" placeholder="จำนวนเงินที่ชำระครั้งนี้" inputmode="decimal" class="w-full p-4 border rounded-2xl text-xl font-bold text-indigo-700 outline-none shadow-inner">
+                <input type="number" id="amt" placeholder="จำนวนเงินที่ชำระครั้งนี้" inputmode="decimal" required class="w-full p-4 bg-white border border-gray-100 rounded-2xl text-xl font-bold text-indigo-700 outline-none shadow-inner">
                 
                 <div class="grid grid-cols-2 gap-2">
                     <input type="date" id="date" required class="p-3 bg-gray-50 rounded-xl text-xs border-none outline-none">
-                    <input type="text" id="staff" placeholder="รหัสพนักงาน *" required class="p-3 bg-gray-50 rounded-xl text-xs border-none outline-none focus:ring-1 focus:ring-indigo-500">
+                    <input type="text" id="staff" placeholder="รหัสพนักงาน *" required class="w-full p-3 bg-gray-50 rounded-xl text-xs border-none outline-none focus:ring-1 focus:ring-indigo-500">
                 </div>
 
-                <textarea id="note" placeholder="รายละเอียดเพิ่มเติม..." class="w-full p-3 bg-gray-50 rounded-xl text-xs border-none outline-none" rows="2"></textarea>
+                <textarea id="note" placeholder="บันทึกรายละเอียดการลงพื้นที่..." class="w-full p-3 bg-gray-50 rounded-xl text-xs border-none outline-none" rows="2"></textarea>
 
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <button type="button" onclick="getLoc()" class="w-full py-3 bg-white text-indigo-700 rounded-xl text-xs font-bold border border-indigo-100 shadow-sm active:scale-95 transition">
-                        <i class="fas fa-location-crosshairs mr-1"></i> <span id="locLabel">ปักหมุดพิกัด *</span>
+                        <i class="fas fa-location-dot mr-1"></i> <span id="locLabel">ปักหมุดพิกัดตำแหน่งปัจจุบัน *</span>
                     </button>
                     <div id="locDisplay" class="text-center text-[10px] font-mono text-indigo-600 mt-2 font-bold hidden"></div>
                     <input type="hidden" id="locVal">
@@ -72,115 +85,142 @@
                     <input type="file" id="pic" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer z-10">
                     <div id="picPreview" class="text-rose-500 py-1">
                         <i class="fas fa-camera text-2xl mb-1"></i>
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-rose-600">ต้องแนบรูปถ่ายหน้างาน *</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-rose-600">ต้องถ่ายรูปหลักฐานหน้างาน *</p>
                     </div>
                 </div>
 
-                <button type="button" onclick="saveData()" class="w-full bg-indigo-700 text-white font-black py-5 rounded-[2rem] shadow-xl text-lg active:bg-indigo-950 active:scale-95 transition-all">บันทึกรายงาน</button>
+                <button type="button" onclick="saveData()" class="w-full bg-indigo-700 text-white font-black py-5 rounded-[2rem] shadow-xl text-lg active:bg-indigo-950 active:scale-95 transition-all">บันทึกรายงานเข้า Sheet & Webex</button>
             </form>
         </div>
     </div>
 
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] hidden flex items-end sm:items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-            <div class="p-6 border-b flex justify-between items-center bg-amber-50">
-                <h3 class="font-bold text-amber-800 flex items-center gap-2"><i class="fas fa-id-card"></i> ข้อมูลติดตามหนี้</h3>
-                <button onclick="closeModal()" class="text-gray-400 text-xl"><i class="fas fa-times"></i></button>
+            <div class="p-6 border-b flex justify-between items-center bg-amber-50 sticky top-0 z-10">
+                <h3 class="font-bold text-amber-800 flex items-center gap-2"><i class="fas fa-id-card-clip"></i> ตรวจสอบข้อมูลลูกค้า</h3>
+                <button onclick="closeModal()" class="text-gray-400 text-xl hover:text-gray-600"><i class="fas fa-times"></i></button>
             </div>
-            <div id="modalBody" class="p-6 overflow-y-auto space-y-3 text-sm"></div>
-            <div class="p-4 bg-gray-50 grid grid-cols-2 gap-3">
-                <button onclick="exportToPDF()" class="bg-rose-600 text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button onclick="closeModal()" class="bg-slate-200 text-slate-700 py-3 rounded-2xl font-bold">ปิดหน้าต่าง</button>
+            <div id="modalBody" class="p-6 overflow-y-auto space-y-2 text-sm flex-1">
+                </div>
+            <div class="p-4 bg-gray-50 grid grid-cols-2 gap-3 border-t">
+                <button onclick="exportToPDF()" class="bg-rose-600 text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg active:bg-rose-700"><i class="fas fa-file-pdf"></i> ดาวน์โหลด PDF</button>
+                <button onclick="closeModal()" class="bg-slate-200 text-slate-700 py-3 rounded-2xl font-bold active:bg-slate-300">ปิด</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="fixed inset-0 bg-indigo-900/60 hidden flex flex-col items-center justify-center text-white z-[100]">
         <div class="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 font-bold tracking-widest animate-pulse">กำลังประมวลผลข้อมูล...</p>
+        <p class="mt-4 font-bold tracking-widest animate-pulse text-center p-4 text-sm">กำลังติดต่อฐานข้อมูลและระบบ Webex...</p>
     </div>
 
     <script>
+        // *** สำคัญ: นำ URL ที่ลงท้ายด้วย /exec มาวางที่นี่ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBO4Vk6wdkwGT7CXMqnbJ8oseF01IC6mXsFovr-BK5KU3KiyXOXsyCA7ImsQ-COBSioA/exec'; 
-        let rawData = []; let filteredByOffice = []; let filteredByCount = [];
+        
+        let rawData = []; 
+        let filteredByOffice = []; 
+        let filteredByCount = [];
 
         window.onload = () => {
             document.getElementById('date').valueAsDate = new Date();
             showLoader(true);
-            fetch(SCRIPT_URL).then(res => res.json()).then(data => {
-                rawData = data; populateOffice(data); showLoader(false);
-            }).catch(() => alert("โหลดฐานข้อมูลล้มเหลว!"));
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(data => {
+                    rawData = data;
+                    populateOffice(data);
+                    showLoader(false);
+                })
+                .catch(err => {
+                    showLoader(false);
+                    alert("⚠️ เชื่อมต่อฐานข้อมูลล้มเหลว ตรวจสอบอินเทอร์เน็ตหรือลิงก์ Script");
+                });
         };
 
-        // --- เพิ่มการบังคับรูปถ่ายในฟังก์ชัน saveData ---
-        function saveData() {
-            const fileInput = document.getElementById('pic');
-            const file = fileInput.files[0];
-            const staffId = document.getElementById('staff').value.trim();
-            const location = document.getElementById('locVal').value;
-            const ca = document.getElementById('caSelect').value;
-            const amount = document.getElementById('amt').value;
-
-            // ตรวจสอบเงื่อนไขทั้งหมด
-            if(!ca) return alert("⚠️ โปรดเลือกหมายเลข CA");
-            if(!amount) return alert("⚠️ โปรดระบุยอดเงินชำระ");
-            if(!staffId) return alert("❌ โปรดกรอกรหัสพนักงาน");
-            if(!location) return alert("📍 โปรดกดปุ่มปักหมุดพิกัดหน้างาน");
-            
-            // ตรวจสอบรูปถ่าย (ห้ามว่าง!)
-            if(!file) {
-                alert("📷 ต้องถ่ายรูปหน้างานเพื่อเป็นหลักฐานการติดตามหนี้ครับ");
-                document.getElementById('photoContainer').classList.add('ring-4', 'ring-rose-400');
-                return;
-            }
-
-            const p = {
-                ca: ca,
-                paymentAmount: amount,
-                paymentDate: document.getElementById('date').value,
-                details: document.getElementById('note').value,
-                staffId: staffId,
-                location: location
-            };
-
-            showLoader(true);
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                p.photoData = reader.result.split(',')[1];
-                p.photoType = file.type;
-                p.photoName = file.name;
-                
-                fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(p) })
-                .then(res => res.json()).then(res => {
-                    showLoader(false);
-                    if(res.status === "success") {
-                        alert(`✅ บันทึกสำเร็จ!\nยอดคงเหลือ: ${res.newDebt} บาท`);
-                        location.reload();
-                    } else { alert("❌ ผิดพลาด: " + res.message); }
-                }).catch(() => { showLoader(false); alert("ส่งข้อมูลล้มเหลว!"); });
-            };
+        function populateOffice(data) {
+            const select = document.getElementById('officeSelect');
+            const offices = [...new Set(data.map(i => i.office))].sort();
+            select.innerHTML = '<option value="">-- เลือกสำนักงาน --</option>';
+            offices.forEach(off => {
+                const opt = document.createElement('option'); opt.value = off; opt.textContent = off; select.appendChild(opt);
+            });
         }
 
-        // แสดงพรีวิวเมื่อเลือกรูป
-        document.getElementById('pic').onchange = function() {
-            if(this.files[0]) {
-                const container = document.getElementById('photoContainer');
-                container.classList.remove('border-rose-300', 'bg-rose-50', 'ring-4', 'ring-rose-400');
-                container.classList.add('border-emerald-300', 'bg-emerald-50');
-                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-500 text-2xl mb-1'></i><p class='text-[10px] font-bold text-emerald-600 truncate px-4'>เลือกรูปสำเร็จ: ${this.files[0].name}</p>`;
+        function onOfficeChange() {
+            const office = document.getElementById('officeSelect').value;
+            const countSection = document.getElementById('countSection');
+            const caSection = document.getElementById('caSection');
+            if (office) {
+                filteredByOffice = rawData.filter(i => i.office === office);
+                countSection.classList.remove('opacity-40', 'pointer-events-none');
+                
+                const counts = [...new Set(filteredByOffice.map(i => i.count))].sort((a,b) => a-b);
+                const cSelect = document.getElementById('countSelect');
+                cSelect.innerHTML = '<option value="">-- เลือกจำนวนฉบับ --</option>';
+                counts.forEach(c => {
+                    const opt = document.createElement('option'); opt.value = c; opt.textContent = c + " ฉบับ"; cSelect.appendChild(opt);
+                });
+            } else {
+                countSection.classList.add('opacity-40', 'pointer-events-none');
+                caSection.classList.add('opacity-40', 'pointer-events-none');
             }
-        };
+        }
 
-        // --- ส่วนเสริม PDF (v6.6 เดิม) ---
+        function onCountChange() {
+            const count = document.getElementById('countSelect').value;
+            const caSection = document.getElementById('caSection');
+            if (count) {
+                filteredByCount = filteredByOffice.filter(i => i.count === count);
+                caSection.classList.remove('opacity-40', 'pointer-events-none');
+                renderCA(filteredByCount);
+            } else {
+                caSection.classList.add('opacity-40', 'pointer-events-none');
+            }
+        }
+
+        function renderCA(data) {
+            const select = document.getElementById('caSelect');
+            select.innerHTML = '<option value="">-- เลือก CA / ชื่อลูกค้า --</option>';
+            data.forEach(i => {
+                const opt = document.createElement('option'); opt.value = i.ca; opt.textContent = `CA: ${i.ca} | ${i.name}`; select.appendChild(opt);
+            });
+        }
+
+        function filterCA() {
+            const term = document.getElementById('search').value.toLowerCase();
+            const filtered = filteredByCount.filter(i => i.ca.toLowerCase().includes(term) || i.name.toLowerCase().includes(term));
+            renderCA(filtered);
+        }
+
+        function updateDebtDisplay() {
+            const ca = document.getElementById('caSelect').value;
+            const found = filteredByCount.find(i => i.ca === ca);
+            document.getElementById('debtDisplay').innerText = found ? found.debt.toLocaleString(undefined, {minimumFractionDigits: 2}) : "0.00";
+            document.getElementById('nameDisplay').innerText = found ? "ลูกค้า: " + found.name : "";
+        }
+
+        // --- ฟังก์ชัน Modal ตรวจสอบข้อมูลพร้อม Photo Preview ---
         function showCustomerDetails() {
             const ca = document.getElementById('caSelect').value;
-            if (!ca) return alert("เลือกหมายเลข CA ก่อนครับ");
+            if (!ca) return alert("⚠️ โปรดเลือกหมายเลข CA ก่อนตรวจสอบครับ");
+            
             const found = filteredByCount.find(i => i.ca === ca);
             const body = document.getElementById('modalBody');
-            let html = `<div id="pdf-area"><h2 style="color:#1e1b4b; font-size:18px; font-weight:bold; margin-bottom:15px; border-bottom:2px solid #fbbf24; padding-bottom:5px;">ข้อมูลผู้ใช้ไฟ CA: ${ca}</h2>`;
+            
+            let html = `<div id="pdf-area"><h2 style="color:#1e1b4b; font-size:18px; font-weight:bold; margin-bottom:15px; border-bottom:2px solid #fbbf24; padding-bottom:5px;">รายงานติดตามหนี้ CA: ${ca}</h2>`;
+            
             for (const [key, value] of Object.entries(found.fullDetails)) {
-                html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #f3f4f6; padding:8px 0;"><span style="color:#9ca3af; font-size:10px; font-weight:bold; text-transform:uppercase;">${key}</span><span style="color:#1f2937; font-weight:bold;">${value}</span></div>`;
+                let displayValue = value;
+                // ตรวจสอบว่าเป็นลิงก์รูป Google Drive หรือไม่
+                if (typeof value === 'string' && value.includes('drive.google.com')) {
+                    let fileId = value.includes('id=') ? value.split('id=')[1] : value.split('/file/d/')[1]?.split('/')[0];
+                    if (fileId) {
+                        const thumbUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                        displayValue = `<img src="${thumbUrl}" class="img-preview" onclick="window.open('${value}', '_blank')">`;
+                    }
+                }
+                html += `<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #f3f4f6; padding:8px 0; gap:10px;"><span style="color:#9ca3af; font-size:9px; font-weight:bold; text-transform:uppercase; min-width:80px;">${key}</span><span style="color:#1f2937; font-weight:bold; text-align:right;">${displayValue}</span></div>`;
             }
             body.innerHTML = html + "</div>";
             document.getElementById('detailModal').classList.remove('hidden');
@@ -190,7 +230,7 @@
         function exportToPDF() {
             const element = document.getElementById('pdf-area');
             const ca = document.getElementById('caSelect').value;
-            const opt = { margin: 10, filename: `Debt_CA_${ca}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const opt = { margin: 10, filename: `Detail_CA_${ca}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             showLoader(true);
             html2pdf().set(opt).from(element).save().then(() => showLoader(false));
         }
@@ -200,62 +240,74 @@
             document.body.classList.remove('modal-open');
         }
 
-        function showLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
-
-        // --- ส่วน Cascading Select เดิม ---
-        function populateOffice(data) {
-            const select = document.getElementById('officeSelect');
-            const offices = [...new Set(data.map(i => i.office))].sort();
-            select.innerHTML = '<option value="">-- เลือกสำนักงาน --</option>';
-            offices.forEach(off => { const opt = document.createElement('option'); opt.value = off; opt.textContent = off; select.appendChild(opt); });
-        }
-        function onOfficeChange() {
-            const office = document.getElementById('officeSelect').value;
-            const countSection = document.getElementById('countSection');
-            if (office) {
-                filteredByOffice = rawData.filter(i => i.office === office);
-                countSection.classList.remove('opacity-40', 'pointer-events-none');
-                const counts = [...new Set(filteredByOffice.map(i => i.count))].sort((a,b) => a-b);
-                const cSelect = document.getElementById('countSelect');
-                cSelect.innerHTML = '<option value="">-- เลือกจำนวนฉบับ --</option>';
-                counts.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c + " ฉบับ"; cSelect.appendChild(opt); });
-            }
-        }
-        function onCountChange() {
-            const count = document.getElementById('countSelect').value;
-            const caSection = document.getElementById('caSection');
-            if (count) {
-                filteredByCount = filteredByOffice.filter(i => i.count === count);
-                caSection.classList.remove('opacity-40', 'pointer-events-none');
-                renderCA(filteredByCount);
-            }
-        }
-        function renderCA(data) {
-            const select = document.getElementById('caSelect');
-            select.innerHTML = '<option value="">-- เลือก CA / ชื่อ --</option>';
-            data.forEach(i => { const opt = document.createElement('option'); opt.value = i.ca; opt.textContent = `CA: ${i.ca} | ${i.name}`; select.appendChild(opt); });
-        }
-        function filterCA() {
-            const term = document.getElementById('search').value.toLowerCase();
-            const filtered = filteredByCount.filter(i => i.ca.toLowerCase().includes(term) || i.name.toLowerCase().includes(term));
-            renderCA(filtered);
-        }
-        function updateDebtDisplay() {
-            const ca = document.getElementById('caSelect').value;
-            const found = filteredByCount.find(i => i.ca === ca);
-            document.getElementById('debtDisplay').innerText = found ? found.debt.toLocaleString(undefined, {minimumFractionDigits: 2}) : "0.00";
-            document.getElementById('nameDisplay').innerText = found ? "ลูกค้า: " + found.name : "";
-        }
         function getLoc() {
             const l = document.getElementById('locLabel');
             if (navigator.geolocation) {
-                l.innerText = "กำลังหาพิกัด...";
+                l.innerText = "กำลังค้นหาตำแหน่ง...";
                 navigator.geolocation.getCurrentPosition(p => {
-                    document.getElementById('locVal').value = `${p.coords.latitude.toFixed(6)}, ${p.coords.longitude.toFixed(6)}`;
+                    const coords = `${p.coords.latitude.toFixed(6)}, ${p.coords.longitude.toFixed(6)}`;
+                    document.getElementById('locVal').value = coords;
                     l.innerText = "ปักหมุดสำเร็จ ✅";
-                });
+                    document.getElementById('locDisplay').innerText = coords;
+                    document.getElementById('locDisplay').classList.remove('hidden');
+                }, () => alert("❌ ไม่สามารถดึงพิกัดได้ กรุณาเปิด GPS และอนุญาตสิทธิ์"), {enableHighAccuracy: true});
             }
         }
+
+        document.getElementById('pic').onchange = function() {
+            if(this.files[0]) {
+                const container = document.getElementById('photoContainer');
+                container.classList.replace('bg-rose-50', 'bg-emerald-50');
+                container.classList.replace('border-rose-300', 'border-emerald-300');
+                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-500 text-2xl mb-1'></i><p class='text-[10px] font-bold text-emerald-600'>เลือกรูปสำเร็จ: ${this.files[0].name}</p>`;
+            }
+        };
+
+        function saveData() {
+            const fileInput = document.getElementById('pic');
+            const file = fileInput.files[0];
+            const staffId = document.getElementById('staff').value.trim();
+            const location = document.getElementById('locVal').value;
+            const ca = document.getElementById('caSelect').value;
+            const amount = document.getElementById('amt').value;
+
+            if(!ca || !amount || !staffId || !location || !file) {
+                alert("⚠️ ข้อมูลไม่ครบ!\n1. เลือก CA\n2. ระบุยอดชำระ\n3. ปักหมุดพิกัด\n4. ถ่ายรูปภาพ\n5. ระบุรหัสพนักงาน");
+                return;
+            }
+
+            showLoader(true);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const payload = {
+                    ca: ca,
+                    paymentAmount: amount,
+                    paymentDate: document.getElementById('date').value,
+                    details: document.getElementById('note').value,
+                    staffId: staffId,
+                    location: location,
+                    photoData: reader.result.split(',')[1],
+                    photoType: file.type,
+                    photoName: file.name
+                };
+
+                fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+                .then(res => res.json())
+                .then(res => {
+                    showLoader(false);
+                    if(res.status === "success") {
+                        alert(`✅ บันทึกสำเร็จและส่งแจ้งเตือน Webex แล้ว!\nยอดหนี้คงเหลือ: ${res.newDebt} บาท`);
+                        location.reload();
+                    } else { alert("❌ ผิดพลาด: " + res.message); }
+                }).catch(err => {
+                    showLoader(false);
+                    alert("❌ ส่งข้อมูลล้มเหลว ตรวจสอบอินเทอร์เน็ต");
+                });
+            };
+        }
+
+        function showLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
     </script>
 </body>
 </html>
