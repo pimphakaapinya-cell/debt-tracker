@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Debt Tracker v7.1 - Optional Photo</title>
+    <title>Debt Tracker v7.4 - Final System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&display=swap" rel="stylesheet">
@@ -12,22 +12,20 @@
         body { font-family: 'Anuphan', sans-serif; touch-action: manipulation; }
         .modal-open { overflow: hidden; }
         .img-preview { max-width: 60px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
-        /* ปรับแต่งปุ่มและ Input ให้ดูทันสมัย */
-        input:focus, select:focus, textarea:focus { border-color: #4f46e5 !important; ring: 2px #e0e7ff; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl flex flex-col relative">
         
         <div class="bg-indigo-900 p-6 text-white rounded-b-[2rem] shadow-lg text-center sticky top-0 z-50">
-            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v7.1</h1>
-            <p class="text-[10px] opacity-70 uppercase tracking-widest font-bold">Data Management System</p>
+            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v7.4</h1>
+            <p class="text-[10px] opacity-70 uppercase tracking-widest font-bold">Log Sync & Optional Photo</p>
         </div>
 
         <div class="p-5 space-y-4 flex-1">
             <div class="space-y-1">
                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">ขั้นตอนที่ 1</label>
-                <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900 outline-none transition-all">
+                <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900 outline-none">
                     <option value="">-- เลือกสำนักงาน --</option>
                 </select>
             </div>
@@ -53,14 +51,14 @@
             </div>
 
             <div class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-3xl border border-indigo-100 text-center shadow-sm">
-                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน</p>
+                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน (Debt!AD)</p>
                 <span id="debtDisplay" class="text-4xl font-black text-slate-800">0.00</span>
                 <p id="nameDisplay" class="text-sm text-indigo-500 font-bold mt-2"></p>
             </div>
 
-            <form id="debtForm" class="space-y-4">
+            <form id="debtForm" class="space-y-4 border-t pt-4">
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">ยอดรับชำระครั้งนี้</label>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">จำนวนเงินที่ชำระ (บ.)</label>
                     <input type="number" id="amt" placeholder="0.00" inputmode="decimal" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-2xl font-black text-indigo-700 outline-none">
                 </div>
                 
@@ -76,12 +74,12 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">หมายเหตุเพิ่มเติม</label>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">หมายเหตุ / รายละเอียด</label>
                     <textarea id="note" placeholder="..." class="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-100 outline-none" rows="2"></textarea>
                 </div>
 
-                <button type="button" onclick="getLoc()" class="w-full py-4 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold border border-slate-200 shadow-sm active:scale-95 transition flex items-center justify-center gap-2">
-                    <i class="fas fa-location-dot text-rose-500"></i> <span id="locLabel">แจ้งพิกัดหน้างาน *</span>
+                <button type="button" onclick="getLoc()" class="w-full py-4 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold border border-slate-200 active:scale-95 transition flex items-center justify-center gap-2">
+                    <i class="fas fa-location-dot text-rose-500"></i> <span id="locLabel">ปักหมุดพิกัดหน้างาน *</span>
                 </button>
                 <input type="hidden" id="locVal">
 
@@ -94,7 +92,7 @@
                 </div>
 
                 <button type="button" onclick="saveData()" class="w-full bg-indigo-700 text-white font-black py-5 rounded-[2rem] shadow-xl text-lg active:bg-indigo-950 active:scale-[0.98] transition-all">
-                    บันทึกข้อมูลและส่งแจ้งเตือน
+                    บันทึกข้อมูลและอัปเดต LOG
                 </button>
             </form>
         </div>
@@ -102,25 +100,21 @@
 
     <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden flex items-end sm:items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
-            <div class="p-6 border-b flex justify-between items-center bg-indigo-50">
-                <h3 class="font-bold text-indigo-900 flex items-center gap-2"><i class="fas fa-user-tag text-amber-500"></i> รายละเอียดลูกค้า</h3>
-                <button onclick="closeModal()" class="text-slate-400 text-xl"><i class="fas fa-times"></i></button>
-            </div>
             <div id="modalBody" class="p-6 overflow-y-auto space-y-2 text-sm"></div>
             <div class="p-4 bg-slate-50 grid grid-cols-2 gap-3 border-t">
                 <button onclick="exportToPDF()" class="bg-rose-600 text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button onclick="closeModal()" class="bg-slate-200 text-slate-600 py-3 rounded-2xl font-bold active:scale-95">ปิดหน้าต่าง</button>
+                <button onclick="closeModal()" class="bg-slate-200 text-slate-600 py-3 rounded-2xl font-bold active:scale-95">ปิด</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="fixed inset-0 bg-indigo-900/70 hidden flex flex-col items-center justify-center text-white z-[100] backdrop-blur-md">
         <div class="w-14 h-14 border-4 border-white border-t-amber-400 rounded-full animate-spin"></div>
-        <p class="mt-4 font-bold tracking-widest animate-pulse">กำลังส่งข้อมูลเข้าระบบ...</p>
+        <p class="mt-4 font-bold tracking-widest animate-pulse">กำลังประมวลผลระบบ v7.4...</p>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-3Ec7i-FgzhgQBurpM-sfL0csK-vIBVCNyWDQDyGWR2qqssC3M7gWFoyTWw_7RlMt/exec'; // ** สำคัญ: เปลี่ยนลิงก์ที่นี่ **
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuEVEuPnrJ6nypztOdaTIBonIgfmAtAsvUaDNz37pRmAANjMByRKaNu0UDTGu0-Nmw/exec'; 
         let rawData = []; let filteredByOffice = []; let filteredByCount = [];
 
         window.onload = () => {
@@ -128,10 +122,9 @@
             showLoader(true);
             fetch(SCRIPT_URL).then(res => res.json()).then(data => {
                 rawData = data; populateOffice(data); showLoader(false);
-            }).catch(e => { showLoader(false); alert("โหลดข้อมูลล้มเหลว ตรวจสอบ URL หรืออินเทอร์เน็ต"); });
+            }).catch(e => { showLoader(false); alert("กรุณาตรวจสอบ URL หรือการเชื่อมต่ออินเทอร์เน็ต"); });
         };
 
-        // --- ระบบส่งข้อมูลแบบไม่บังคับรูปภาพ ---
         function saveData() {
             const fileInput = document.getElementById('pic');
             const file = fileInput.files[0];
@@ -140,10 +133,9 @@
             const ca = document.getElementById('caSelect').value;
             const amount = document.getElementById('amt').value;
 
-            if(!ca || !amount || !staffId || !locVal) return alert("⚠️ กรุณากรอกข้อมูล: เลือก CA, ยอดเงิน, รหัสพนักงาน และแจ้งพิกัด");
+            if(!ca || !amount || !staffId || !locVal) return alert("⚠️ ข้อมูลไม่ครบ: โปรดเลือก CA, ยอดเงิน, รหัสพนักงาน และพิกัด");
 
             showLoader(true);
-
             const payload = {
                 ca: ca,
                 paymentAmount: amount,
@@ -164,7 +156,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                send(payload); // ส่งทันทีหากไม่มีรูป
+                send(payload);
             }
         }
 
@@ -173,26 +165,24 @@
             .then(res => res.json()).then(res => {
                 showLoader(false);
                 if(res.status === "success") {
-                    alert(`✅ บันทึกสำเร็จ!\nยอดคงเหลือใหม่: ${res.newDebt} บาท`);
+                    alert(`✅ บันทึกสำเร็จ!\nยอดขาด/ค้างใหม่: ${res.newDebt} บาท`);
                     location.reload();
                 } else { alert("❌ เกิดข้อผิดพลาด: " + res.message); }
-            }).catch(err => { showLoader(false); alert("❌ ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง"); });
+            }).catch(err => { showLoader(false); alert("การบันทึกล้มเหลว โปรดลองใหม่อีกครั้ง"); });
         }
 
-        // --- ส่วนงาน UI & Filters ---
+        // --- ส่วนงาน UI/Filters ---
         document.getElementById('pic').onchange = function() {
             if(this.files[0]) {
-                const container = document.getElementById('photoContainer');
-                container.classList.replace('border-indigo-200', 'border-emerald-300');
-                container.classList.replace('bg-indigo-50/30', 'bg-emerald-50');
-                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-600 text-2xl mb-1'></i><p class='text-[10px] font-bold text-emerald-700'>เลือกรูปภาพเรียบร้อย</p>`;
+                document.getElementById('photoContainer').classList.replace('bg-indigo-50/30', 'bg-emerald-50');
+                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-600 text-2xl mb-1'></i><p class='text-[10px] font-bold text-emerald-700'>แนบรูปสำเร็จ</p>`;
             }
         };
 
         function populateOffice(data) {
             const select = document.getElementById('officeSelect');
             const offices = [...new Set(data.map(i => i.office))].sort();
-            select.innerHTML = '<option value="">-- 1. เลือกสำนักงาน --</option>';
+            select.innerHTML = '<option value="">-- เลือกสำนักงาน --</option>';
             offices.forEach(off => { const opt = document.createElement('option'); opt.value = off; opt.textContent = off; select.appendChild(opt); });
         }
 
@@ -204,7 +194,7 @@
                 countSection.classList.remove('opacity-40', 'pointer-events-none');
                 const counts = [...new Set(filteredByOffice.map(i => i.count))].sort((a,b) => a-b);
                 const cSelect = document.getElementById('countSelect');
-                cSelect.innerHTML = '<option value="">-- 2. เลือกจำนวนฉบับ --</option>';
+                cSelect.innerHTML = '<option value="">-- เลือกจำนวนฉบับ --</option>';
                 counts.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c + " ฉบับ"; cSelect.appendChild(opt); });
             }
         }
@@ -221,7 +211,7 @@
 
         function renderCA(data) {
             const select = document.getElementById('caSelect');
-            select.innerHTML = '<option value="">-- 3. เลือกหมายเลข CA --</option>';
+            select.innerHTML = '<option value="">-- เลือกหมายเลข CA --</option>';
             data.forEach(i => { const opt = document.createElement('option'); opt.value = i.ca; opt.textContent = `CA: ${i.ca} | ${i.name}`; select.appendChild(opt); });
         }
 
@@ -241,17 +231,17 @@
         function getLoc() {
             const l = document.getElementById('locLabel');
             if (navigator.geolocation) {
-                l.innerText = "กำลังค้นหาพิกัด...";
+                l.innerText = "กำลังดึงพิกัด...";
                 navigator.geolocation.getCurrentPosition(p => {
                     document.getElementById('locVal').value = `${p.coords.latitude.toFixed(6)}, ${p.coords.longitude.toFixed(6)}`;
-                    l.innerText = "แจ้งพิกัดสำเร็จ ✅";
-                }, () => alert("โปรดเปิด GPS และอนุญาตสิทธิ์ตำแหน่งบนมือถือ"));
+                    l.innerText = "ปักหมุดสำเร็จ ✅";
+                }, () => alert("โปรดอนุญาตสิทธิ์การเข้าถึงตำแหน่ง"));
             }
         }
 
         function showCustomerDetails() {
             const ca = document.getElementById('caSelect').value;
-            if (!ca) return alert("โปรดเลือกหมายเลข CA ก่อนครับ");
+            if (!ca) return alert("โปรดเลือก CA ก่อน");
             const found = filteredByCount.find(i => i.ca === ca);
             const body = document.getElementById('modalBody');
             let html = `<div id="pdf-area"><h2 style="font-size:18px; font-weight:bold; color:#1e1b4b; margin-bottom:15px; border-bottom:3px solid #fbbf24; padding-bottom:5px;">รายละเอียด CA: ${ca}</h2>`;
@@ -271,7 +261,7 @@
         function exportToPDF() {
             const element = document.getElementById('pdf-area');
             const ca = document.getElementById('caSelect').value;
-            const opt = { margin: 10, filename: `Debt_Report_${ca}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const opt = { margin: 10, filename: `Debt_Report_${ca}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             showLoader(true); html2pdf().set(opt).from(element).save().then(() => showLoader(false));
         }
 
