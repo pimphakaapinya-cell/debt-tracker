@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Debt Tracker v8.2 - Mandatory Photo</title>
+    <title>Debt Tracker v9.2 - Final Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&display=swap" rel="stylesheet">
@@ -12,27 +12,28 @@
         body { font-family: 'Anuphan', sans-serif; touch-action: manipulation; }
         .modal-open { overflow: hidden; }
         .img-preview { max-width: 60px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
+        input:focus, select:focus, textarea:focus { border-color: #4f46e5 !important; outline: none; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl flex flex-col relative pb-10">
         
-        <div class="bg-indigo-900 p-6 text-white rounded-b-[2rem] shadow-lg text-center sticky top-0 z-50">
-            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v8.2</h1>
-            <p class="text-[10px] opacity-70 uppercase tracking-widest font-bold text-white">ระบบบังคับถ่ายรูปหลักฐานหน้างาน</p>
+        <div class="bg-indigo-900 p-6 text-white rounded-b-[2.5rem] shadow-lg text-center sticky top-0 z-50">
+            <h1 class="text-xl font-bold italic text-amber-400">DEBT TRACKER v9.2</h1>
+            <p class="text-[10px] opacity-70 uppercase tracking-widest font-bold">Mandatory Evidence & Fix Permission</p>
         </div>
 
         <div class="p-5 space-y-4 flex-1">
             <div class="space-y-1">
                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">ขั้นตอนที่ 1</label>
-                <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900 outline-none">
+                <select id="officeSelect" onchange="onOfficeChange()" class="w-full p-4 bg-indigo-50 border-2 border-indigo-100 rounded-2xl font-bold text-indigo-900">
                     <option value="">-- เลือกสำนักงาน --</option>
                 </select>
             </div>
 
             <div id="countSection" class="opacity-40 pointer-events-none transition-all space-y-1">
                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">ขั้นตอนที่ 2</label>
-                <select id="countSelect" onchange="onCountChange()" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold text-slate-700 outline-none">
+                <select id="countSelect" onchange="onCountChange()" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold text-slate-700">
                     <option value="">-- เลือกจำนวนฉบับ --</option>
                 </select>
             </div>
@@ -40,18 +41,18 @@
             <div id="caSection" class="space-y-2 opacity-40 pointer-events-none transition-all">
                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">ขั้นตอนที่ 3</label>
                 <div class="flex gap-2">
-                    <input type="text" id="search" onkeyup="filterCA()" placeholder="ค้นหา CA หรือ ชื่อ..." class="flex-1 p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                    <input type="text" id="search" onkeyup="filterCA()" placeholder="ค้นหา CA หรือ ชื่อ..." class="flex-1 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
                     <button type="button" onclick="showCustomerDetails()" class="bg-amber-500 text-white px-5 rounded-2xl shadow-md active:scale-95 transition">
                         <i class="fas fa-search-plus"></i>
                     </button>
                 </div>
-                <select id="caSelect" onchange="updateDebtDisplay()" class="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-700 bg-white outline-none">
+                <select id="caSelect" onchange="updateDebtDisplay()" class="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-700 bg-white">
                     <option value="">-- เลือกหมายเลข CA --</option>
                 </select>
             </div>
 
             <div class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-3xl border border-indigo-100 text-center shadow-sm">
-                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน (AD)</p>
+                <p class="text-[10px] font-bold text-indigo-600 uppercase mb-1">ยอดค้างชำระปัจจุบัน</p>
                 <span id="debtDisplay" class="text-4xl font-black text-slate-800">0.00</span>
                 <p id="nameDisplay" class="text-sm text-indigo-500 font-bold mt-2"></p>
             </div>
@@ -59,23 +60,23 @@
             <form id="debtForm" class="space-y-4 pt-2">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">จำนวนเงินที่ชำระ (บ.)</label>
-                    <input type="number" id="amt" placeholder="0.00" inputmode="decimal" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-2xl font-black text-indigo-700 outline-none">
+                    <input type="number" id="amt" placeholder="0.00" inputmode="decimal" class="w-full p-4 border-2 border-slate-100 rounded-2xl text-2xl font-black text-indigo-700">
                 </div>
                 
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">วันที่ชำระ</label>
-                        <input type="date" id="date" required class="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-100 outline-none">
+                        <input type="date" id="date" required class="w-full p-3 bg-slate-50 rounded-xl text-sm border">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">รหัสพนักงาน *</label>
-                        <input type="text" id="staff" placeholder="ระบุรหัส" required class="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-100 outline-none">
+                        <input type="text" id="staff" placeholder="ระบุรหัส" required class="w-full p-3 bg-slate-50 rounded-xl text-sm border">
                     </div>
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">หมายเหตุ</label>
-                    <textarea id="note" placeholder="..." class="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-100 outline-none" rows="2"></textarea>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">หมายเหตุ / รายละเอียด</label>
+                    <textarea id="note" placeholder="..." class="w-full p-3 bg-slate-50 rounded-xl text-sm border" rows="2"></textarea>
                 </div>
 
                 <button type="button" onclick="getLoc()" class="w-full py-4 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold border border-slate-200 active:scale-95 transition flex items-center justify-center gap-2">
@@ -83,7 +84,7 @@
                 </button>
                 <input type="hidden" id="locVal">
 
-                <div id="photoContainer" class="relative border-2 border-dashed border-rose-400 bg-rose-50 rounded-2xl p-6 text-center transition-all duration-300 shadow-inner">
+                <div id="photoContainer" class="relative border-2 border-dashed border-rose-400 bg-rose-50 rounded-2xl p-6 text-center transition-all duration-300">
                     <input type="file" id="pic" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer z-10" required>
                     <div id="picPreview" class="text-rose-500">
                         <i class="fas fa-camera text-3xl mb-1"></i>
@@ -99,8 +100,8 @@
     </div>
 
     <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden flex items-end sm:items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] max-h-[85vh] flex flex-col overflow-hidden shadow-2xl text-slate-700">
-            <div id="modalBody" class="p-6 overflow-y-auto space-y-2 text-sm"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+            <div id="modalBody" class="p-6 overflow-y-auto space-y-2 text-sm text-slate-700"></div>
             <div class="p-4 bg-slate-50 grid grid-cols-2 gap-3 border-t">
                 <button onclick="exportToPDF()" class="bg-rose-600 text-white py-3 rounded-2xl font-bold active:scale-95"><i class="fas fa-file-pdf"></i> PDF</button>
                 <button onclick="closeModal()" class="bg-slate-200 text-slate-600 py-3 rounded-2xl font-bold active:scale-95">ปิด</button>
@@ -110,22 +111,29 @@
 
     <div id="loader" class="fixed inset-0 bg-indigo-900/70 hidden flex flex-col items-center justify-center text-white z-[100] backdrop-blur-md">
         <div class="w-14 h-14 border-4 border-white border-t-amber-400 rounded-full animate-spin"></div>
-        <p class="mt-4 font-bold tracking-widest animate-pulse">กำลังส่งข้อมูล...</p>
+        <p class="mt-4 font-bold animate-pulse text-sm tracking-widest">กำลังอัปโหลดหลักฐาน v9.2...</p>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwphOy_K3KINpaWmcGKasXsC5r9x0ab9K23cPJ2a0aQOZyqie6bItVd2HReEE-E0FKD/exec'; 
+        // *** สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ล่าสุดที่คุณ Deploy จาก Apps Script ***
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjN2RzDCzOZ83NQvQRdDjQNKHoeiiRERTs5NP1yQkLzeNFT_hPTX6WYN90Qcei-kTV/exec'; 
+        
         let rawData = []; let filteredByOffice = []; let filteredByCount = [];
 
         window.onload = () => {
             document.getElementById('date').valueAsDate = new Date();
             showLoader(true);
             fetch(SCRIPT_URL).then(res => res.json()).then(data => {
-                rawData = data; populateOffice(data); showLoader(false);
-            }).catch(e => { showLoader(false); alert("โหลดข้อมูลล้มเหลว ตรวจสอบอินเทอร์เน็ต"); });
+                rawData = data; 
+                populateOffice(data); 
+                showLoader(false);
+            }).catch(e => { 
+                showLoader(false); 
+                alert("ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการ Deploy และสิทธิ์ใน Apps Script"); 
+            });
         };
 
-        // --- ฟังก์ชันส่งข้อมูล (บังคับถ่ายรูป 100%) ---
+        // --- ฟังก์ชันบันทึกข้อมูล ---
         function saveData() {
             const fileInput = document.getElementById('pic');
             const file = fileInput.files[0];
@@ -134,11 +142,9 @@
             const ca = document.getElementById('caSelect').value;
             const amount = document.getElementById('amt').value;
 
-            // ตรวจสอบความครบถ้วน
-            if(!ca || !amount || !staffId) return alert("⚠️ กรุณากรอกข้อมูลหลักให้ครบถ้วน");
-            if(!locVal) return alert("📍 กรุณากดแจ้งพิกัดหน้างานก่อนครับ");
-            
-            // บังคับรูปที่นี่
+            // Validation บังคับกรอกข้อมูลและถ่ายรูป
+            if(!ca || !amount || !staffId) return alert("⚠️ กรุณากรอกข้อมูลหลักให้ครบ (เลือก CA, ยอดเงิน, รหัสพนักงาน)");
+            if(!locVal) return alert("📍 กรุณากดปุ่มแจ้งพิกัดหน้างานก่อนครับ");
             if(!file) return alert("📷 บังคับต้องถ่ายรูปหน้าบ้านลูกค้าเพื่อเป็นหลักฐาน!");
 
             showLoader(true);
@@ -168,36 +174,36 @@
                         alert(`✅ บันทึกสำเร็จ!\nยอดขาด/ค้างใหม่: ${res.newDebt} บาท`);
                         location.reload();
                     } else {
-                        alert("❌ เกิดข้อผิดพลาด: " + res.message);
+                        alert("❌ ข้อผิดพลาด: " + res.message);
                     }
                 })
                 .catch(err => {
                     showLoader(false);
-                    alert("❌ ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง");
+                    alert("❌ ระบบขัดข้อง (Check Permissions in Apps Script)");
                 });
             };
             reader.readAsDataURL(file);
         }
 
-        // เปลี่ยนสถานะ UI เมื่อถ่ายรูปเสร็จ
+        // เปลี่ยนสี UI เมื่อถ่ายรูปสำเร็จ
         document.getElementById('pic').onchange = function() {
             if(this.files[0]) {
                 const container = document.getElementById('photoContainer');
                 container.classList.replace('border-rose-400', 'border-emerald-400');
                 container.classList.replace('bg-rose-50', 'bg-emerald-50');
-                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-500 text-3xl mb-1'></i><p class='text-xs font-bold text-emerald-600 uppercase'>แนบรูปหลักฐานแล้ว</p>`;
+                document.getElementById('picPreview').innerHTML = `<i class='fas fa-check-circle text-emerald-500 text-3xl mb-1'></i><p class='text-xs font-bold text-emerald-600'>แนบรูปหลักฐานแล้ว</p>`;
             }
         };
 
-        // --- ฟังก์ชัน UI/Filtering ---
+        // --- ฟังก์ชันช่วยเหลืออื่นๆ ---
         function getLoc() {
             const l = document.getElementById('locLabel');
             if (navigator.geolocation) {
-                l.innerText = "กำลังค้นหาพิกัด...";
+                l.innerText = "กำลังหาพิกัด...";
                 navigator.geolocation.getCurrentPosition(p => {
                     document.getElementById('locVal').value = `${p.coords.latitude},${p.coords.longitude}`;
                     l.innerText = "แจ้งพิกัดสำเร็จ ✅";
-                }, () => alert("โปรดอนุญาตสิทธิ์การเข้าถึงตำแหน่งบนมือถือ"));
+                }, () => alert("โปรดอนุญาตสิทธิ์การเข้าถึงตำแหน่ง"));
             }
         }
 
@@ -205,7 +211,10 @@
             const select = document.getElementById('officeSelect');
             const offices = [...new Set(data.map(i => i.office))].sort();
             select.innerHTML = '<option value="">-- เลือกสำนักงาน --</option>';
-            offices.forEach(off => { const opt = document.createElement('option'); opt.value = off; opt.textContent = off; select.appendChild(opt); });
+            offices.forEach(off => { 
+                const opt = document.createElement('option'); 
+                opt.value = off; opt.textContent = off; select.appendChild(opt); 
+            });
         }
 
         function onOfficeChange() {
@@ -217,7 +226,10 @@
                 const counts = [...new Set(filteredByOffice.map(i => i.count))].sort((a,b) => a-b);
                 const cSelect = document.getElementById('countSelect');
                 cSelect.innerHTML = '<option value="">-- เลือกจำนวนฉบับ --</option>';
-                counts.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c + " ฉบับ"; cSelect.appendChild(opt); });
+                counts.forEach(c => { 
+                    const opt = document.createElement('option'); 
+                    opt.value = c; opt.textContent = c + " ฉบับ"; cSelect.appendChild(opt); 
+                });
             }
         }
 
@@ -233,7 +245,10 @@
         function renderCA(data) {
             const select = document.getElementById('caSelect');
             select.innerHTML = '<option value="">-- เลือกหมายเลข CA --</option>';
-            data.forEach(i => { const opt = document.createElement('option'); opt.value = i.ca; opt.textContent = `CA: ${i.ca} | ${i.name}`; select.appendChild(opt); });
+            data.forEach(i => { 
+                const opt = document.createElement('option'); 
+                opt.value = i.ca; opt.textContent = `CA: ${i.ca} | ${i.name}`; select.appendChild(opt); 
+            });
         }
 
         function filterCA() {
@@ -261,7 +276,7 @@
                     let id = value.includes('id=') ? value.split('id=')[1] : value.split('/file/d/')[1]?.split('/')[0];
                     if (id) val = `<img src="https://drive.google.com/uc?export=view&id=${id}" class="img-preview" onclick="window.open('${value}', '_blank')">`;
                 }
-                html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #f1f5f9; padding:10px 0;"><span style="color:#64748b; font-size:10px; font-weight:bold; text-transform:uppercase; min-width:80px;">${key}</span><span style="font-weight:bold; color:#334155; text-align:right;">${val}</span></div>`;
+                html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #f1f5f9; padding:10px 0;"><span style="color:#64748b; font-size:10px; font-weight:bold; text-transform:uppercase;">${key}</span><span style="font-weight:bold; text-align:right;">${val}</span></div>`;
             }
             body.innerHTML = html + "</div>";
             document.getElementById('detailModal').classList.remove('hidden');
@@ -271,12 +286,18 @@
         function exportToPDF() {
             const element = document.getElementById('pdf-area');
             const ca = document.getElementById('caSelect').value;
-            const opt = { margin: 10, filename: `Debt_Report_${ca}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const opt = { margin: 10, filename: `Debt_${ca}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             showLoader(true); html2pdf().set(opt).from(element).save().then(() => showLoader(false));
         }
 
-        function closeModal() { document.getElementById('detailModal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
-        function showLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
+        function closeModal() { 
+            document.getElementById('detailModal').classList.add('hidden'); 
+            document.body.classList.remove('modal-open'); 
+        }
+        
+        function showLoader(s) { 
+            document.getElementById('loader').style.display = s ? 'flex' : 'none'; 
+        }
     </script>
 </body>
 </html>
